@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>25 SQL MCQ Quiz | Jishan EduHub</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e0e7ff, #fce7f3, #d1fae5);
+    min-height: 100vh;
+    padding: 20px;
+    color: #1e293b;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px #33415525;
+}
+
+.header {
+    background: linear-gradient(120deg, #4f46e5, #9333ea);
+    color: white;
+    text-align: center;
+    padding: 28px 15px;
+}
+
+.header h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+.quiz-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 18px 22px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.progress {
+    height: 8px;
+    background: #e2e8f0;
+}
+
+.progress-bar {
+    width: 4%;
+    height: 100%;
+    background: linear-gradient(90deg, #4f46e5, #ec4899);
+    transition: width 0.3s;
+}
+
+.quiz-body {
+    padding: 25px;
+}
+
+.question-number {
+    color: #7c3aed;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.question {
+    font-size: 21px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.options {
+    display: grid;
+    gap: 12px;
+}
+
+.option {
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #fff;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.option:hover {
+    border-color: #818cf8;
+    background: #eef2ff;
+}
+
+.option.selected {
+    border-color: #6366f1;
+    background: #eef2ff;
+}
+
+.option.correct {
+    background: #dcfce7;
+    border-color: #16a34a;
+}
+
+.option.wrong {
+    background: #fee2e2;
+    border-color: #dc2626;
+}
+
+.feedback {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    line-height: 1.6;
+    display: none;
+}
+
+.feedback.show {
+    display: block;
+}
+
+.feedback.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.feedback.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+button {
+    flex: 1;
+    min-width: 110px;
+    border: none;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: #4f46e5;
+}
+
+button:hover {
+    opacity: 0.88;
+}
+
+button:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.answer-btn {
+    background: #0891b2;
+}
+
+.prev-btn {
+    background: #64748b;
+}
+
+.next-btn {
+    background: #7c3aed;
+}
+
+.result {
+    display: none;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.result h2 {
+    color: #4f46e5;
+    margin-bottom: 15px;
+}
+
+.result p {
+    margin: 12px 0;
+    font-size: 18px;
+}
+
+.footer {
+    background: #f8fafc;
+    padding: 17px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media(max-width: 500px) {
+    body { padding: 10px; }
+    .container { margin: 5px auto; }
+    .header h1 { font-size: 24px; }
+    .quiz-body { padding: 18px; }
+    .question { font-size: 18px; }
+    .option { font-size: 15px; }
+    button { padding: 12px 8px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <header class="header">
+        <h1>🎓 Jishan EduHub</h1>
+        <p>Learn SQL • Practice MCQs • Improve Your Skills</p>
+    </header>
+
+    <div class="quiz-info">
+        <span>📘 Subject: SQL</span>
+        <span id="counter">Question 1 / 25</span>
+        <span id="score">Score: 0</span>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <main class="quiz-body" id="quiz">
+        <div class="question-number" id="qNumber"></div>
+        <h2 class="question" id="question"></h2>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+
+        <div class="buttons">
+            <button class="prev-btn" id="prevBtn"
+                onclick="previousQuestion()">← Previous</button>
+
+            <button class="answer-btn" id="answerBtn"
+                onclick="showAnswer()">Show Answer</button>
+
+            <button class="next-btn" id="nextBtn"
+                onclick="nextQuestion()">Next →</button>
+        </div>
+    </main>
+
+    <section class="result" id="result">
+        <h2>🎉 Quiz Completed!</h2>
+        <p id="finalScore"></p>
+        <p id="percentage"></p>
+        <p id="remark"></p>
+        <button onclick="restartQuiz()">🔄 Try Again</button>
+    </section>
+
+    <footer class="footer">
+        © 2026 Jishan EduHub | Practice Makes Progress
+    </footer>
+</div>
+
+<script>
+const questions = [
+{
+q: "What does SQL stand for?",
+o: ["Structured Query Language", "Simple Question Language",
+    "Standard Quick Language", "System Query Logic"],
+a: 0,
+e: "SQL stands for Structured Query Language. It is used to manage relational databases."
+},
+{
+q: "Which SQL statement retrieves data from a table?",
+o: ["GET", "OPEN", "SELECT", "FETCH TABLE"],
+a: 2,
+e: "SELECT is used to retrieve data from one or more database tables."
+},
+{
+q: "Which command adds a new record to a table?",
+o: ["ADD", "INSERT INTO", "UPDATE", "CREATE"],
+a: 1,
+e: "INSERT INTO adds new rows to a database table."
+},
+{
+q: "Which command changes existing records?",
+o: ["CHANGE", "MODIFY ROW", "UPDATE", "ALTER DATA"],
+a: 2,
+e: "UPDATE changes existing values in one or more rows."
+},
+{
+q: "Which clause filters rows based on a condition?",
+o: ["ORDER BY", "WHERE", "GROUP BY", "SELECT"],
+a: 1,
+e: "WHERE filters rows according to a specified condition."
+},
+{
+q: "Which command removes a table completely?",
+o: ["DELETE", "REMOVE", "DROP TABLE", "CLEAR"],
+a: 2,
+e: "DROP TABLE removes the table structure and its data."
+},
+{
+q: "Which keyword removes duplicate rows from query results?",
+o: ["UNIQUE", "DISTINCT", "DIFFERENT", "ONLY"],
+a: 1,
+e: "SELECT DISTINCT returns unique combinations of selected values."
+},
+{
+q: "Which function counts rows?",
+o: ["SUM()", "TOTAL()", "COUNT()", "NUMBER()"],
+a: 2,
+e: "COUNT() counts rows or non-NULL values, depending on its argument."
+},
+{
+q: "Which clause sorts query results?",
+o: ["SORT", "ORDER BY", "ARRANGE", "GROUP BY"],
+a: 1,
+e: "ORDER BY sorts results in ascending (ASC) or descending (DESC) order."
+},
+{
+q: "Which constraint uniquely identifies each row?",
+o: ["FOREIGN KEY", "NOT NULL", "PRIMARY KEY", "DEFAULT"],
+a: 2,
+e: "A PRIMARY KEY uniquely identifies each row and cannot contain NULL values."
+},
+{
+q: "Which constraint links two tables?",
+o: ["PRIMARY KEY", "FOREIGN KEY", "CHECK", "DEFAULT"],
+a: 1,
+e: "A FOREIGN KEY references a key in another or the same table."
+},
+{
+q: "Which operator checks for a value within a range?",
+o: ["BETWEEN", "RANGE", "WITHIN", "INRANGE"],
+a: 0,
+e: "BETWEEN tests whether a value falls within an inclusive range."
+},
+{
+q: "Which operator matches a pattern?",
+o: ["MATCH", "LIKE", "EQUALS", "SEARCH"],
+a: 1,
+e: "LIKE performs pattern matching, often using % and _ wildcards."
+},
+{
+q: "Which wildcard represents any number of characters in LIKE?",
+o: ["_", "*", "%", "#"],
+a: 2,
+e: "% represents zero or more characters in a LIKE pattern."
+},
+{
+q: "Which function returns the highest value?",
+o: ["TOP()", "HIGH()", "MAX()", "UPPER()"],
+a: 2,
+e: "MAX() returns the maximum value in a set."
+},
+{
+q: "Which function calculates the average?",
+o: ["MEAN()", "AVG()", "AVERAGE()", "MID()"],
+a: 1,
+e: "AVG() calculates the average of non-NULL numeric values."
+},
+{
+q: "Which clause groups rows with matching values?",
+o: ["ORDER BY", "WHERE", "GROUP BY", "DISTINCT BY"],
+a: 2,
+e: "GROUP BY groups rows so aggregate functions can be applied to each group."
+},
+{
+q: "Which clause filters grouped results?",
+o: ["WHERE", "HAVING", "ORDER BY", "LIMIT"],
+a: 1,
+e: "HAVING filters groups, often using aggregate conditions."
+},
+{
+q: "Which JOIN returns matching rows from both tables?",
+o: ["LEFT JOIN", "FULL JOIN", "INNER JOIN", "CROSS JOIN"],
+a: 2,
+e: "INNER JOIN returns rows that satisfy the join condition in both tables."
+},
+{
+q: "Which JOIN keeps all rows from the left table?",
+o: ["INNER JOIN", "LEFT JOIN", "CROSS JOIN", "SELF JOIN"],
+a: 1,
+e: "LEFT JOIN preserves every left-table row and returns matching right-table data when available."
+},
+{
+q: "Which command removes selected rows from a table?",
+o: ["DROP", "DELETE", "ERASE TABLE", "REMOVE TABLE"],
+a: 1,
+e: "DELETE removes rows. Without a WHERE clause, it can remove all rows."
+},
+{
+q: "Which command changes a table's structure?",
+o: ["UPDATE", "CHANGE", "ALTER TABLE", "REPLACE"],
+a: 2,
+e: "ALTER TABLE can add, modify, or drop columns and constraints, depending on the database."
+},
+{
+q: "What does NULL generally represent in SQL?",
+o: ["Zero", "Empty text", "Unknown or missing value", "False"],
+a: 2,
+e: "NULL represents missing or unknown data. Use IS NULL to test for it."
+},
+{
+q: "Which command saves a transaction permanently?",
+o: ["SAVE", "COMMIT", "LOCK", "FINISH"],
+a: 1,
+e: "COMMIT makes the current transaction's changes permanent."
+},
+{
+q: "Which command undoes uncommitted transaction changes?",
+o: ["UNDO", "CANCEL", "ROLLBACK", "REVERSE"],
+a: 2,
+e: "ROLLBACK undoes changes in the current transaction that have not been committed."
+}
+];
+
+let current = 0;
+let answers = Array(questions.length).fill(null);
+let revealed = Array(questions.length).fill(false);
+
+function getScore() {
+    return answers.reduce((total, answer, i) =>
+        total + (answer === questions[i].a ? 1 : 0), 0);
+}
+
+function renderQuestion() {
+    const item = questions[current];
+
+    document.getElementById("counter").textContent =
+        `Question ${current + 1} / ${questions.length}`;
+
+    document.getElementById("qNumber").textContent =
+        `QUESTION ${current + 1}`;
+
+    document.getElementById("question").textContent = item.q;
+
+    document.getElementById("score").textContent =
+        `Score: ${getScore()}`;
+
+    document.getElementById("progress").style.width =
+        `${((current + 1) / questions.length) * 100}%`;
+
+    const options = document.getElementById("options");
+    options.innerHTML = "";
+
+    item.o.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+        button.onclick = () => selectAnswer(index);
+
+        if (answers[current] === index) {
+            button.classList.add("selected");
+        }
+
+        if (revealed[current]) {
+            button.disabled = true;
+
+            if (index === item.a) {
+                button.classList.add("correct");
+            } else if (answers[current] === index) {
+                button.classList.add("wrong");
+            }
+        }
+
+        options.appendChild(button);
+    });
+
+    document.getElementById("prevBtn").disabled = current === 0;
+    document.getElementById("nextBtn").textContent =
+        current === questions.length - 1 ? "Finish ✓" : "Next →";
+
+    document.getElementById("answerBtn").textContent =
+        revealed[current] ? "Answer Shown" : "Show Answer";
+
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback";
+    feedback.textContent = "";
+
+    if (revealed[current]) {
+        feedback.classList.add("show");
+        const correct = answers[current] === item.a;
+        feedback.classList.add(correct ? "success" : "error");
+        feedback.textContent =
+            `${correct ? "Correct!" : "Correct answer: " + item.o[item.a]}. ${item.e}`;
+    }
+}
+
+function selectAnswer(index) {
+    if (revealed[current]) return;
+
+    answers[current] = index;
+    renderQuestion();
+}
+
+function showAnswer() {
+    revealed[current] = true;
+    renderQuestion();
+}
+
+function previousQuestion() {
+    if (current > 0) {
+        current--;
+        renderQuestion();
+    }
+}
+
+function nextQuestion() {
+    if (current < questions.length - 1) {
+        current++;
+        renderQuestion();
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    const score = getScore();
+    const percent = Math.round(score / questions.length * 100);
+
+    document.getElementById("finalScore").textContent =
+        `Your Score: ${score} / ${questions.length}`;
+
+    document.getElementById("percentage").textContent =
+        `Percentage: ${percent}%`;
+
+    document.getElementById("remark").textContent =
+        percent >= 80 ? "Excellent work! 🌟" :
+        percent >= 60 ? "Good job! Keep practising. 👍" :
+        "Keep learning SQL and try again! 💪";
+}
+
+function restartQuiz() {
+    current = 0;
+    answers = Array(questions.length).fill(null);
+    revealed = Array(questions.length).fill(false);
+
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("result").style.display = "none";
+
+    renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
